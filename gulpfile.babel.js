@@ -1,9 +1,11 @@
-// generated on 2015-09-20 using generator-gulp-webapp 1.0.3
+// generated on 2015-09-18 using generator-gulp-webapp 1.0.3
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
+import ghPages from 'gulp-gh-pages';
+
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -39,6 +41,7 @@ const testLintOptions = {
 };
 
 gulp.task('lint', lint('app/scripts/**/*.js'));
+
 gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
 
 gulp.task('html', ['styles'], () => {
@@ -108,9 +111,14 @@ gulp.task('serve', ['styles', 'fonts'], () => {
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
+
+  gulp.watch('app/scripts/**/*.js', ['lint']);
+
   gulp.watch('app/styles/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
+
+
 });
 
 gulp.task('serve:dist', () => {
@@ -162,4 +170,9 @@ gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
 
 gulp.task('default', ['clean'], () => {
   gulp.start('build');
+});
+
+gulp.task('deploy', () => {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
 });
