@@ -55,9 +55,9 @@
 		;
 
 		var lines = 33,
-		disabledLines = [],
-		centerX,
-		centerY
+			disabledLines = [],
+			centerX,
+			centerY
 		;
 
 
@@ -76,11 +76,17 @@
 			touch: []
 		};
 
-		self.percentageVisible = 0.5;
+		//change number of lightling
+		self.percentageVisible = 0.75;
+
+		self.resize = function(){
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		};
 
 		self.init = function(){
 
-
+			self.resize();
 			self.updateSpace();
 
 			self.instDots();
