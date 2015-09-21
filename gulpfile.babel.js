@@ -5,7 +5,7 @@ import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
 import ghPages from 'gulp-gh-pages';
-
+import gulpIgnore from 'gulp-ignore';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -40,7 +40,7 @@ const testLintOptions = {
   }
 };
 
-gulp.task('lint', lint('app/scripts/**/*.js'));
+gulp.task('lint', lint(['app/scripts/**/*.js','!app/scripts/dependency/**/*.js']));
 
 gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
 

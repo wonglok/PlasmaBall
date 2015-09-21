@@ -38,5 +38,8 @@
         "single"
       ]
     }
+  },
+  "dependencies": {
+    "gulp-ignore": "^1.2.1"
   }
 }

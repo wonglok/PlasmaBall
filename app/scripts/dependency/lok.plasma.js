@@ -77,12 +77,79 @@
 		};
 
 		//change number of lightling
-		self.percentageVisible = 0.75;
+		self.percentageVisible = 0.5;
 
 		self.resize = function(){
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
+
+			self.updateSpace();
 		};
+
+		self.mouseMove = function (e) {
+			var rect = self.canvas.getBoundingClientRect();
+
+			var mx = e.clientX - rect.left,
+			my = e.clientY - rect.top;
+
+			self.mouse.x = mx;
+			self.mouse.y = my;
+
+		};
+
+
+		self.touchMove = function (e){
+
+			var rect = self.canvas.getBoundingClientRect();
+
+			var mx = e.touches[0].clientX - rect.left,
+			my = e.touches[0].clientY - rect.top;
+
+			self.mouse.x = mx;
+			self.mouse.y = my;
+
+			self.mouse.touch = e.touches;
+			self.mouse.rect = rect;
+
+			if (self.withinPlamsaBall()){
+				e.preventDefault();
+			}else{
+				self.mouse.down = false;
+			}
+
+
+			return false;
+		};
+
+
+
+		self.mouseDown = function () {
+			self.mouse.down = true;
+			document.body.style.cursor = 'pointer';
+		};
+
+		self.mouseUp = function () {
+			self.mouse.down = false;
+			document.body.style.cursor = 'default';
+		};
+
+
+		self.listenToEvents = function (){
+			window.addEventListener('resize', window.debounce(self.resize, 100, true) );
+
+			self.canvas.addEventListener('mousemove', self.mouseMove, false);
+			self.canvas.addEventListener('mousedown', self.mouseDown, false);
+			self.canvas.addEventListener('mouseup', self.mouseUp, false);
+
+			self.canvas.addEventListener('touchmove', self.touchMove, false);
+			self.canvas.addEventListener('touchstart', self.mouseDown, false);
+
+			self.canvas.addEventListener('touchend', self.mouseUp, false);
+			self.canvas.addEventListener('touchcancel', self.mouseUp, false);
+			self.canvas.addEventListener('touchleave', self.mouseUp, false);
+
+		};
+
 
 		self.init = function(){
 
@@ -95,6 +162,8 @@
 			self.instThinThunder();
 
 			self.instRandomLight();
+
+			self.listenToEvents();
 		};
 
 
@@ -167,7 +236,7 @@
 			centerY = canvas.height/2;
 
 			innnerRadius = 25;
-			outerRadius = canvas.width < canvas.height ? (canvas.width/3) : (canvas.height/3);
+			outerRadius = canvas.width < canvas.height ? (canvas.width/2.4) : (canvas.height/2.4);
 
 			// self.needsUpdate = true;
 		};
@@ -385,8 +454,10 @@
 			var gradient = ctx.createLinearGradient(0,0,1000,0);
 			gradient.addColorStop(0,self.getRandomThunderColorPurple());
 			gradient.addColorStop(0.2,self.getRandomThunderColor());
+
 			// gradient.addColorStop(0.3,self.getRandomThunderColor());
 			// gradient.addColorStop(0.7,self.getRandomThunderColor());
+
 			gradient.addColorStop(1,self.getRandomThunderColor());
 
 			return gradient;
@@ -423,7 +494,6 @@
 			self.context.fillStyle = '#060C2A';
 			self.context.fillRect(0, 0, self.canvas.width, self.canvas.height);
 
-
 			self.renderInnerBall(context);
 			self.renderOuterBall(context);
 			self.renderRod(context);
@@ -436,6 +506,7 @@
 				random = Math.random();
 
 				//percent
+				//render lightling
 				if (random <= 0.01){
 					self.renderLightning(lightningType[0],pIndex);
 				}else if (random <= 0.03){
@@ -444,6 +515,7 @@
 					self.renderLightning(lightningType[2],pIndex);
 				}
 
+				//render dots.
 				if (random <= 0.16){
 					outerDots[pIndex].draw(context);
 				}else{
@@ -452,10 +524,10 @@
 			}
 
 
-			context.save();
-			context.font = "20pt Arial";
-			context.fillText("Sample String", 10, 50);
-			context.restore();
+			// context.save();
+			// context.font = "20pt Arial";
+			// context.fillText("Sample String", 10, 50);
+			// context.restore();
 
 		};
 	}
