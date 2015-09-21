@@ -54,13 +54,11 @@
 		lightningType = []
 		;
 
-		var lines = 33,
+		var lines = 30,
 			disabledLines = [],
 			centerX,
 			centerY
 		;
-
-
 
 		self.iPointers = [
 			{
@@ -77,13 +75,24 @@
 		};
 
 		//change number of lightling
-		self.percentageVisible = 0.5;
+		self.itensity = 0.55;
 
 		self.resize = function(){
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 
 			self.updateSpace();
+		};
+
+		self.updateSpace = function(){
+
+			centerX = canvas.width/2;
+			centerY = canvas.height/2;
+
+			innnerRadius = canvas.width < canvas.height ? (canvas.width/35) : (canvas.height/35);
+			outerRadius = canvas.width < canvas.height ? (canvas.width/2.4) : (canvas.height/2.4);
+
+			// self.needsUpdate = true;
 		};
 
 		self.mouseMove = function (e) {
@@ -150,8 +159,13 @@
 
 		};
 
+		self.attachToDom = function(targetId){
+			document.getElementById(targetId).appendChild(self.canvas);
+		};
 
-		self.init = function(){
+		self.init = function(targetId){
+
+			self.attachToDom(targetId);
 
 			self.resize();
 			self.updateSpace();
@@ -198,7 +212,7 @@
 		};
 
 		self.displayPortion = function(portion){
-			var timesToDisable = lines - Math.ceil( (portion * lines * self.percentageVisible) ) ;
+			var timesToDisable = lines - Math.ceil( (portion * lines * self.itensity) ) ;
 			var i= 0;
 
 			disabledLines.length = 0;
@@ -230,16 +244,7 @@
 			clearTimeout(self.randomTimer);
 		};
 
-		self.updateSpace = function(){
 
-			centerX = canvas.width/2;
-			centerY = canvas.height/2;
-
-			innnerRadius = 25;
-			outerRadius = canvas.width < canvas.height ? (canvas.width/2.4) : (canvas.height/2.4);
-
-			// self.needsUpdate = true;
-		};
 
 		self.calcNewCircleX = function(radius, i, offset){
 			return (centerX + radius * Math.cos( (2 * Math.PI) * (i/lines) * (1+offset) ) );

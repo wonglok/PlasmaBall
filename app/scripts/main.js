@@ -20,24 +20,23 @@
 	var self = new LokPlasmaBall();
 
 
-	function loop() {
+	function work() {
+		// self.itensity = Math.random();
 		self.update();
 		self.draw(self.context);
 	}
 
 	function startLoop(){
-		window.requestAnimationFrame(function loopSiLoopSiLoop(){
-			window.requestAnimationFrame(loopSiLoopSiLoop);
-			loop();
+		window.requestAnimationFrame(function hyperloop(){
+			window.requestAnimationFrame(hyperloop);
+			work();
 		});
 	}
 
 
 	function init() {
 
-		self.init();
-
-		document.getElementById('lokPlasmaBall').appendChild(self.canvas);
+		self.init('lokPlasmaBall');
 
 		startLoop();
 
